@@ -60,3 +60,10 @@ echo ".DS_Store" >> .gitignore.DS_Store
 hs_err_pid*
 replay_pid*
 >>>>>>> adbec1e60564f3b80e61551bbde54d8e0d5722e4
+
+.DS_Store
+target/
+*.log
+.idea/
+.vscode/
+
