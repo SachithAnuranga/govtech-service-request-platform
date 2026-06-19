@@ -71,6 +71,7 @@ The system follows a layered architecture:
 ## Security
 
 Role-based access control is implemented using Spring Security + JWT.
+Full details in [`docs/security.md`](docs/security.md)
 
 ### Roles
 - **ADMIN** → Full access
@@ -85,6 +86,13 @@ Role-based access control is implemented using Spring Security + JWT.
    Authorization: Bearer <token>
    ```
 4. System validates token and enforces role-based access control
+
+### Implementation Status
+- ✅ JWT generation & validation (`JwtUtil`)
+- ✅ Custom user authentication (`CustomUserDetailsService`)
+- ✅ Request-level token validation (`JwtAuthenticationFilter`)
+- ✅ Security rules & filter chain (`SecurityConfig`)
+- ⏳ Auth controller (`/login`, `/register`) — in progress
 
 ---
 
@@ -230,6 +238,13 @@ Details in [`docs/testing.md`](docs/testing.md)
 Full details in [`docs/assumptions.md`](docs/assumptions.md)
 
 ---
+
+### Implementation Status
+- ✅ JWT generation & validation (`JwtUtil`)
+- ✅ Custom user authentication (`CustomUserDetailsService`)
+- ✅ Request-level token validation (`JwtAuthenticationFilter`)
+- ✅ Security rules & filter chain (`SecurityConfig`)
+- ✅ Auth controller (`/register`, `/login`)
 
 ## Author
 

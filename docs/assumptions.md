@@ -6,3 +6,4 @@
 - StatusHistory records previous and new status as strings to keep the audit trail decoupled from enum changes.
 - JWT token expiry is set to 24 hours by default.
 - Docker Compose is not provided — local setup instructions are documented in the main README.
+- JWT secret is stored in application.properties for assessment purposes; production deployments should use environment variables or a secrets manager.
