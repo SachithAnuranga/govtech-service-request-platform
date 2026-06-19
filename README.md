@@ -50,8 +50,24 @@ The system follows a layered architecture:
 - StatusHistory
 - User (Authentication & Roles)
 
+| Entity | Purpose | Key Relationships |
+|---|---|---|
+| **User** | Authentication & role-based access | — |
+| **Citizen** | Citizen profile data | Has many ServiceRequests |
+| **ServiceRequest** | Government service request lifecycle | Belongs to Citizen; has many SupportingDocuments, Notifications, StatusHistory entries |
+| **SupportingDocument** | Document metadata for a request | Belongs to ServiceRequest |
+| **Notification** | Status-change alerts for citizens | Belongs to Citizen and ServiceRequest |
+| **StatusHistory** | Audit trail of status changes | Belongs to ServiceRequest |
+
+### Soft Delete Strategy
+- **Citizen** → deactivated via `status = INACTIVE` (not physically deleted)
+- **ServiceRequest** → cancelled via `status = CANCELLED` (not physically deleted)
+- **SupportingDocument** → physically deleted (no historical dependency)
+- **Notification** → physically deleted if removed (rare case)
 ---
 
+
+---
 ## Security
 
 Role-based access control is implemented using Spring Security + JWT.
