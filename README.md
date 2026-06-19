@@ -1,75 +1,111 @@
 # GovTech Sri Lanka — Digital Government Service Request Platform
 
-A secure, production-aware **Java Spring Boot** backend system for managing 
-digital government service requests.
+A secure, production-ready backend system built with **Java Spring Boot** for managing digital government service requests between citizens and government service agents.
 
 ---
 
-## 📋 Table of Contents
-- [Project Overview](#project-overview)
-- [Tech Stack](#tech-stack)
-- [System Architecture](#system-architecture)
-- [Getting Started](#getting-started)
-- [API Documentation](#api-documentation)
-- [Security & Roles](#security--roles)
-- [Database Design](#database-design)
-- [Postman Collection](#postman-collection)
-- [Testing](#testing)
-- [Assumptions & Limitations](#assumptions--limitations)
-- [Design Decisions](#design-decisions)
+## Project Overview
+
+This system enables citizens to:
+- Register and manage profiles
+- Submit government service requests
+- Upload supporting document metadata
+- Track request status in real time
+- Receive notifications on status updates
+
+It also enables government service agents and administrators to manage and process requests securely.
 
 ---
 
-## 📌 Project Overview
+## Technical Stack
 
-This system enables citizens to submit and track government service requests 
-digitally. It supports citizen management, service request lifecycle management, 
-supporting document handling, and real-time notifications.
-
-**Key Capabilities:**
-- Citizen profile management
-- Service request submission and tracking
-- Supporting document management
-- Notification and status tracking
-- Role-based access control
+- Java 17
+- Spring Boot 3.x
+- Spring Security + JWT
+- Spring Data JPA (Hibernate)
+- MySQL 8
+- Maven
+- JUnit 5 + Mockito
+- Swagger / OpenAPI
 
 ---
 
-## 🛠️ Tech Stack
+## Architecture
 
-| Layer | Technology |
-|---|---|
-| Language | Java 17 |
-| Framework | Spring Boot 3.x |
-| Security | Spring Security + JWT |
-| Database | MySQL 8.x |
-| ORM | Spring Data JPA / Hibernate |
-| Build Tool | Maven |
-| API Docs | Swagger / OpenAPI |
-| Testing | JUnit 5, Mockito |
+The system follows a layered architecture:
+
+- Controller Layer (REST APIs)
+- Service Layer (Business Logic)
+- Repository Layer (Data Access)
+- Entity Layer (Database Models)
 
 ---
 
-## 🏗️ System Architecture
+## Entities
 
-> Details available in [`docs/database-design.md`](docs/database-design.md)
-
-**Core Modules:**
-1. Citizen Management
-2. Service Request Management
-3. Supporting Document Management
-4. Notification & Status Tracking
+- Citizen
+- ServiceRequest
+- SupportingDocument
+- Notification
+- StatusHistory
+- User (Authentication & Roles)
 
 ---
 
-## 🚀 Getting Started
+## Security
+
+Role-based access control is implemented using Spring Security + JWT.
+
+### Roles
+- **ADMIN** → Full access
+- **SERVICE_AGENT** → Manage and process service requests
+- **CITIZEN** → Submit and view own requests
+
+### Authentication Flow
+1. User logs in via `/api/v1/auth/login`
+2. System returns a JWT token
+3. Token must be included in all protected requests:
+   ```
+   Authorization: Bearer <token>
+   ```
+4. System validates token and enforces role-based access control
+
+---
+
+## End-to-End Business Flow
+
+1. Administrator creates a Citizen profile
+2. Citizen submits a Service Request
+3. System validates citizen before request creation
+4. Supporting document metadata is added
+5. Service Agent reviews request
+6. Service Agent updates status:
+   - SUBMITTED → IN_REVIEW → APPROVED / REJECTED
+7. System generates notification on status change
+8. Citizen views notifications
+9. Citizen marks notification as read
+10. Agent/Admin views full request + history
+
+---
+
+## 📡 API Structure
+
+- `/api/v1/auth` → Authentication
+- `/api/v1/citizens` → Citizen management
+- `/api/v1/service-requests` → Service requests
+- `/api/v1/documents` → Supporting documents
+- `/api/v1/notifications` → Notifications
+
+---
+
+## Getting Started
 
 ### Prerequisites
-- Java 17 or higher
-- Maven 3.8 or higher
-- MySQL 8.x
+- Java 17+
+- Maven 3.8+
+- MySQL 8+
 
-### Local Setup Steps
+### Setup Steps
 
 **1. Clone the repository**
 ```bash
@@ -82,13 +118,14 @@ cd govtech-service-request-platform
 CREATE DATABASE govtech_db;
 ```
 
-**3. Configure application properties**
+**3. Configure database credentials**
 
 Update `src/main/resources/application.properties`:
 ```properties
 spring.datasource.url=jdbc:mysql://localhost:3306/govtech_db
 spring.datasource.username=your_db_username
 spring.datasource.password=your_db_password
+spring.jpa.hibernate.ddl-auto=update
 ```
 
 **4. Run the application**
@@ -97,112 +134,88 @@ mvn spring-boot:run
 ```
 
 **5. Access the application**
-
+```
 Base URL : http://localhost:8080
 Swagger  : http://localhost:8080/swagger-ui.html
-
----
-
-## 📡 API Documentation
-
-Full API documentation is available in [`docs/api-documentation.md`](docs/api-documentation.md)
-
-| Module | Base Path |
-|---|---|
-| Authentication | `/api/v1/auth` |
-| Citizens | `/api/v1/citizens` |
-| Service Requests | `/api/v1/service-requests` |
-| Documents | `/api/v1/documents` |
-| Notifications | `/api/v1/notifications` |
-
----
-
-## 🔐 Security & Roles
-
-Full security documentation in [`docs/security.md`](docs/security.md)
-
-| Role | Access Level |
-|---|---|
-| `ADMIN` | Full platform access |
-| `SERVICE_AGENT` | Process requests, review documents |
-| `CITIZEN` | Submit requests, view own data |
-
-### Test Credentials
-> Will be updated after implementation
-
----
-
-## 🗄️ Database Design
-
-Full database design in [`docs/database-design.md`](docs/database-design.md)
-
-**Core Entities:**
-- `citizens`
-- `service_requests`
-- `supporting_documents`
-- `notifications`
-- `status_history`
-- `users`
-
----
-
-## 📮 Postman Collection
-
-The Postman collection is available in the [`postman/`](postman/) folder.
-
-**Import Steps:**
-1. Open Postman
-2. Click **Import**
-3. Select `postman/govtech-platform-collection.json`
-4. Set environment variables
-5. Run authentication first before other requests
-
-**Collection Covers:**
-- ✅ Authentication
-- ✅ Citizen management
-- ✅ Service request management
-- ✅ Document management
-- ✅ Notifications
-- ✅ End-to-end business flow
-- ✅ Error scenarios
-
----
-
-## 🧪 Testing
-
-Full testing details in [`docs/testing.md`](docs/testing.md)
-
-```bash
-# Run all tests
-mvn test
-
-# Run specific test class
-mvn test -Dtest=ServiceRequestServiceTest
 ```
 
 ---
 
-## 📝 Assumptions & Limitations
+## Error Response Format
+
+All errors follow a consistent structure:
+
+```json
+{
+  "timestamp": "2026-06-19T10:00:00",
+  "status": 404,
+  "error": "Resource Not Found",
+  "message": "Citizen not found with id: 1"
+}
+```
+
+### HTTP Status Codes Used
+
+| Code | Meaning |
+|---|---|
+| 200 | Success |
+| 201 | Resource created |
+| 400 | Validation error |
+| 401 | Unauthorized (missing/invalid token) |
+| 403 | Forbidden (role not permitted) |
+| 404 | Resource not found |
+| 500 | Internal server error |
+
+---
+
+## API Documentation
+
+Full API documentation is available in [`docs/api-documentation.md`](docs/api-documentation.md)
+
+---
+
+## Postman Collection
+
+The Postman collection is available in the [`postman/`](postman/) folder.
+
+### Postman Testing Flow
+
+1. Call `/auth/login` to get a JWT token
+2. Set the token in Postman's Authorization tab (Bearer Token)
+3. Execute APIs in this order:
+   - Create Citizen
+   - Create Service Request
+   - Add Supporting Document
+   - Update Request Status
+   - View Notifications
+   - Mark Notification as Read
+4. Test error scenarios (invalid ID, unauthorized access)
+
+---
+
+## Testing
+
+```bash
+mvn test
+```
+
+Details in [`docs/testing.md`](docs/testing.md)
+
+---
+
+## Assumptions
+
+- File upload is not implemented; only document metadata is stored
+- Soft delete is used for critical entities
+- JWT token expiry is 24 hours
+- Email/SMS notifications are not integrated; only database notifications
+- Docker Compose is not provided — local setup instructions are documented above
 
 Full details in [`docs/assumptions.md`](docs/assumptions.md)
 
-- Actual file upload is not implemented — document metadata only
-- Docker Compose is not provided — local setup instructions above
-- JWT token expiry is set to 24 hours by default
-
 ---
 
-## 🏛️ Design Decisions
+## Author
 
-- **Soft delete** used for citizens and service requests to preserve data history
-- **JWT** selected for stateless authentication suitable for REST APIs
-- **Status history** maintained as a separate table for full audit trail
-- **Notification** auto-generated on every service request status change
-
----
-
-## 👤 Author
-
-> Sachith Anuranga 
-> Senior Software Engineer Assessment  
-> GovTech Sri Lanka — Digital Government Service Request Platform
+Sachith Anuranga
+Senior Software Engineer Assessment — GovTech Sri Lanka
