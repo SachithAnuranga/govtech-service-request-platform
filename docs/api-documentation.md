@@ -29,5 +29,26 @@ Response: `200 OK`
   "role": "ADMIN"
 }
 ```
+## Error Response Format
+
+All errors follow a consistent structure:
+
+```json
+{
+  "timestamp": "2026-06-20T22:00:00",
+  "status": 404,
+  "error": "Resource Not Found",
+  "message": "Citizen not found with id: 1"
+}
+```
+
+### Handled Error Cases
+| Exception | HTTP Status |
+|---|---|
+| ResourceNotFoundException | 404 |
+| DuplicateResourceException | 409 |
+| BadCredentialsException | 401 |
+| Validation errors | 400 |
+| Unexpected errors | 500 |
 
 > More endpoints will be added as each module is implemented.
