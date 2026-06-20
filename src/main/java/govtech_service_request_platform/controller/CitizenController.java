@@ -1,7 +1,7 @@
 package govtech_service_request_platform.controller;
 
-import govtech_service_request_platform.dto.citizen.CitizenRequest;
-import govtech_service_request_platform.dto.citizen.CitizenResponse;
+import govtech_service_request_platform.dto.citizen.CitizenRequestDto;
+import govtech_service_request_platform.dto.citizen.CitizenResponseDto;
 import govtech_service_request_platform.service.CitizenService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,25 +21,25 @@ public class CitizenController {
 
     @PostMapping
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CitizenResponse> createCitizen(@Valid @RequestBody CitizenRequest request) {
+    public ResponseEntity<CitizenResponseDto> createCitizen(@Valid @RequestBody CitizenRequestDto request) {
         return ResponseEntity.status(HttpStatus.CREATED).body(citizenService.createCitizen(request));
     }
 
     @GetMapping("/{id}")
     @PreAuthorize("hasAnyRole('ADMIN', 'SERVICE_AGENT')")
-    public ResponseEntity<CitizenResponse> getCitizen(@PathVariable Long id) {
+    public ResponseEntity<CitizenResponseDto> getCitizen(@PathVariable Long id) {
         return ResponseEntity.ok(citizenService.getCitizenById(id));
     }
 
     @GetMapping
     @PreAuthorize("hasAnyRole('ADMIN', 'SERVICE_AGENT')")
-    public ResponseEntity<List<CitizenResponse>> getAllCitizens() {
+    public ResponseEntity<List<CitizenResponseDto>> getAllCitizens() {
         return ResponseEntity.ok(citizenService.getAllCitizens());
     }
 
     @PutMapping("/{id}")
     @PreAuthorize("hasRole('ADMIN')")
-    public ResponseEntity<CitizenResponse> updateCitizen(@PathVariable Long id, @Valid @RequestBody CitizenRequest request) {
+    public ResponseEntity<CitizenResponseDto> updateCitizen(@PathVariable Long id, @Valid @RequestBody CitizenRequestDto request) {
         return ResponseEntity.ok(citizenService.updateCitizen(id, request));
     }
 

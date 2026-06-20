@@ -1,8 +1,8 @@
 package govtech_service_request_platform.controller;
 
-import govtech_service_request_platform.dto.auth.LoginRequest;
-import govtech_service_request_platform.dto.auth.LoginResponse;
-import govtech_service_request_platform.dto.auth.RegisterRequest;
+import govtech_service_request_platform.dto.auth.LoginRequestDto;
+import govtech_service_request_platform.dto.auth.LoginResponseDto;
+import govtech_service_request_platform.dto.auth.RegisterRequestDto;
 import govtech_service_request_platform.entity.User;
 import govtech_service_request_platform.enums.Roles;
 import govtech_service_request_platform.repository.UserRepository;
@@ -26,7 +26,7 @@ public class AuthController {
     private final JwtUtil jwtUtil;
 
     @PostMapping("/register")
-    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequestDto request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             return ResponseEntity.badRequest().body("Username already exists");
         }
@@ -42,7 +42,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<LoginResponse> login(@Valid @RequestBody LoginRequest request) {
+    public ResponseEntity<LoginResponseDto> login(@Valid @RequestBody LoginRequestDto request) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
         );
@@ -52,6 +52,6 @@ public class AuthController {
 
         String token = jwtUtil.generateToken(user.getUsername(), user.getRole().name());
 
-        return ResponseEntity.ok(new LoginResponse(token, user.getUsername(), user.getRole().name()));
+        return ResponseEntity.ok(new LoginResponseDto(token, user.getUsername(), user.getRole().name()));
     }
 }

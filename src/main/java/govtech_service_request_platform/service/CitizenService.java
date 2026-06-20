@@ -1,7 +1,7 @@
 package govtech_service_request_platform.service;
 
-import govtech_service_request_platform.dto.citizen.CitizenRequest;
-import govtech_service_request_platform.dto.citizen.CitizenResponse;
+import govtech_service_request_platform.dto.citizen.CitizenRequestDto;
+import govtech_service_request_platform.dto.citizen.CitizenResponseDto;
 import govtech_service_request_platform.entity.Citizen;
 import govtech_service_request_platform.enums.CitizenStatus;
 import govtech_service_request_platform.exceptions.DuplicateResourceException;
@@ -20,7 +20,7 @@ public class CitizenService {
     private final CitizenRepository citizenRepository;
 
     @Transactional
-    public CitizenResponse createCitizen(CitizenRequest request) {
+    public CitizenResponseDto createCitizen(CitizenRequestDto request) {
         if (citizenRepository.existsByNic(request.getNic())) {
             throw new DuplicateResourceException("Citizen already exists with NIC: " + request.getNic());
         }
@@ -37,23 +37,23 @@ public class CitizenService {
                 .status(CitizenStatus.ACTIVE)
                 .build();
 
-        return CitizenResponse.fromEntity(citizenRepository.save(citizen));
+        return CitizenResponseDto.fromEntity(citizenRepository.save(citizen));
     }
 
-    public CitizenResponse getCitizenById(Long id) {
+    public CitizenResponseDto getCitizenById(Long id) {
         Citizen citizen = citizenRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Citizen not found with id: " + id));
-        return CitizenResponse.fromEntity(citizen);
+        return CitizenResponseDto.fromEntity(citizen);
     }
 
-    public List<CitizenResponse> getAllCitizens() {
+    public List<CitizenResponseDto> getAllCitizens() {
         return citizenRepository.findAll().stream()
-                .map(CitizenResponse::fromEntity)
+                .map(CitizenResponseDto::fromEntity)
                 .toList();
     }
 
     @Transactional
-    public CitizenResponse updateCitizen(Long id, CitizenRequest request) {
+    public CitizenResponseDto updateCitizen(Long id, CitizenRequestDto request) {
         Citizen citizen = citizenRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Citizen not found with id: " + id));
 
@@ -63,7 +63,7 @@ public class CitizenService {
         citizen.setMobileNumber(request.getMobileNumber());
         citizen.setAddress(request.getAddress());
 
-        return CitizenResponse.fromEntity(citizenRepository.save(citizen));
+        return CitizenResponseDto.fromEntity(citizenRepository.save(citizen));
     }
 
     @Transactional

@@ -8,7 +8,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class CitizenResponse {
+public class CitizenResponseDto {
     private Long id;
     private String fullName;
     private String nic;
@@ -19,8 +19,8 @@ public class CitizenResponse {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    public static CitizenResponse fromEntity(Citizen citizen) {
-        return new CitizenResponse(
+    public static CitizenResponseDto fromEntity(Citizen citizen) {
+        return new CitizenResponseDto(
                 citizen.getId(),
                 citizen.getFullName(),
                 citizen.getNic(),
