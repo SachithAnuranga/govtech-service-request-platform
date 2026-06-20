@@ -136,4 +136,40 @@ Side effects: creates a `StatusHistory` record and an unread `Notification` for 
 `DELETE /api/v1/service-requests/{id}` — ADMIN only
 Soft delete — sets status to `CANCELLED`. Response: `200 OK` or `404 Not Found`
 
+## Supporting Document Management
+
+All endpoints require `Authorization: Bearer <token>`.
+
+### Add Document
+`POST /api/v1/documents` — CITIZEN only
+```json
+{
+  "serviceRequestId": 1,
+  "documentType": "NIC Copy",
+  "documentName": "nic_front.pdf",
+  "documentReference": "doc-ref-001"
+}
+```
+Response: `201 Created` — verificationStatus defaults to `PENDING`
+
+### Get by ID
+`GET /api/v1/documents/{id}` — ADMIN, SERVICE_AGENT, CITIZEN
+
+### Get by Service Request
+`GET /api/v1/documents/service-request/{serviceRequestId}` — ADMIN, SERVICE_AGENT, CITIZEN
+
+### Update Document
+`PUT /api/v1/documents/{id}` — ADMIN, SERVICE_AGENT
+```json
+{
+  "documentType": "NIC Copy",
+  "documentName": "nic_front_v2.pdf",
+  "documentReference": "doc-ref-001",
+  "verificationStatus": "VERIFIED"
+}
+```
+
+### Delete Document
+`DELETE /api/v1/documents/{id}` — ADMIN only
+
 > More endpoints will be added as each module is implemented.
