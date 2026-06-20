@@ -84,4 +84,56 @@ Same body as Create. Response: `200 OK` or `404 Not Found`
 `DELETE /api/v1/citizens/{id}` — ADMIN only
 Soft delete — sets status to INACTIVE. Response: `200 OK` or `404 Not Found`
 
+## Service Request Management
+
+All endpoints require `Authorization: Bearer <token>`.
+
+### Create Service Request
+`POST /api/v1/service-requests` — CITIZEN only
+```json
+{
+  "citizenId": 1,
+  "serviceType": "Birth Certificate",
+  "description": "Requesting a certified copy of birth certificate"
+}
+```
+Response: `201 Created` — initial status is `SUBMITTED`
+
+### Get Service Request by ID
+`GET /api/v1/service-requests/{id}` — ADMIN, SERVICE_AGENT, CITIZEN
+Response: `200 OK` or `404 Not Found`
+
+### Get Requests by Citizen
+`GET /api/v1/service-requests/citizen/{citizenId}` — ADMIN, SERVICE_AGENT, CITIZEN
+Response: `200 OK` (array, empty array if none)
+
+### List All Service Requests
+`GET /api/v1/service-requests` — ADMIN, SERVICE_AGENT
+Response: `200 OK` (array)
+
+### Update Service Request Details
+`PUT /api/v1/service-requests/{id}` — ADMIN, SERVICE_AGENT
+```json
+{
+  "serviceType": "Birth Certificate",
+  "description": "Updated description"
+}
+```
+Response: `200 OK` or `404 Not Found`
+
+### Update Service Request Status
+`PATCH /api/v1/service-requests/{id}/status` — ADMIN, SERVICE_AGENT
+```json
+{
+  "status": "IN_REVIEW"
+}
+```
+Valid values: `SUBMITTED`, `IN_REVIEW`, `APPROVED`, `REJECTED`, `CANCELLED`
+Response: `200 OK`
+Side effects: creates a `StatusHistory` record and an unread `Notification` for the citizen automatically.
+
+### Cancel Service Request
+`DELETE /api/v1/service-requests/{id}` — ADMIN only
+Soft delete — sets status to `CANCELLED`. Response: `200 OK` or `404 Not Found`
+
 > More endpoints will be added as each module is implemented.
