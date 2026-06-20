@@ -185,3 +185,19 @@ Response: `200 OK` (array, empty array if none)
 Response: `200 OK`
 
 > Notifications are automatically created whenever a service request's status changes (see Service Request Management → Update Status).
+
+## Status History
+
+### Get Status History for a Service Request
+`GET /api/v1/service-requests/{id}/history` — ADMIN, SERVICE_AGENT
+Response: `200 OK` (array, ordered chronologically)
+```json
+[
+  {
+    "id": 1,
+    "serviceRequestId": 5,
+    "previousStatus": "SUBMITTED",
+    "newStatus": "IN_REVIEW",
+    "changedAt": "2026-06-21T10:00:00"
+  }
+]
