@@ -172,4 +172,16 @@ Response: `201 Created` — verificationStatus defaults to `PENDING`
 ### Delete Document
 `DELETE /api/v1/documents/{id}` — ADMIN only
 
-> More endpoints will be added as each module is implemented.
+## Notification & Status Tracking
+
+All endpoints require `Authorization: Bearer <token>`.
+
+### Get Notifications by Citizen
+`GET /api/v1/notifications/citizen/{citizenId}` — ADMIN, SERVICE_AGENT, CITIZEN
+Response: `200 OK` (array, empty array if none)
+
+### Mark Notification as Read
+`PATCH /api/v1/notifications/{id}/read` — ADMIN, SERVICE_AGENT, CITIZEN
+Response: `200 OK`
+
+> Notifications are automatically created whenever a service request's status changes (see Service Request Management → Update Status).
