@@ -50,3 +50,6 @@ mvn clean test
 ```
 
 Result: `Tests run: 8, Failures: 0, Errors: 0` (7 CitizenServiceTest + 1 contextLoads)
+
+## Postman Collection Status
+Manual end-to-end testing in progress via Postman collection (`GovtechCitizenServiceRequestManagement`), covering Auth, Citizens, and Service Requests so far. Documents, Notifications, and Error Scenarios pending.

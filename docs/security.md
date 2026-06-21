@@ -70,3 +70,6 @@ Method-level `@PreAuthorize` annotations enforce ownership rules not expressible
 - Passwords are never returned in API responses (excluded at DTO level)
 - BCrypt hashing means raw passwords are never stored or recoverable
 - JWT payload contains only username and role — no sensitive personal data (NIC, email, etc.)
+
+## Known Behavior Note
+Requests with no Authorization header currently return `403 Forbidden` rather than `401 Unauthorized`, due to Spring Security's default `ExceptionTranslationFilter` behavior when no custom `AuthenticationEntryPoint` is configured. Both responses correctly indicate denied access; a custom entry point could be added to strictly return 401 for missing credentials vs 403 for insufficient role, if required.
