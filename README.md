@@ -200,7 +200,15 @@ Full API documentation is available in [`docs/api-documentation.md`](docs/api-do
 
 ## Postman Collection
 
-The Postman collection is available in the [`postman/`](postman/) folder.
+The Postman collection is available at [`postman/govtech-collection.json`](postman/govtech-collection.json)
+
+Import into Postman and configure these collection variables:
+- `base_url` — your server URL (default: `http://localhost:8080`)
+- `token` — JWT from logging in as ADMIN
+- `citizen_token` — JWT from logging in as CITIZEN
+- `agent_token` — JWT from logging in as SERVICE_AGENT
+
+Run Authentication → login first to obtain tokens before testing other endpoints.
 
 ### Postman Testing Flow
 
